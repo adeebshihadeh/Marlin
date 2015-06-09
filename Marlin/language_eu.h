@@ -2,16 +2,11 @@
  * Basque-Euskera
  *
  * LCD Menu Messages
- * See also documentation/LCDLanguageFont.md
+ * Please note these are limited to 17 characters!
  *
  */
 #ifndef LANGUAGE_EU_H
 #define LANGUAGE_EU_H
-
-#define MAPPER_NON
-// Define SIMULATE_ROMFONT to see what is seen on the character based display defined in Configuration.h
-//#define SIMULATE_ROMFONT
-#define DISPLAY_CHARSET_ISO10646_1
 
 #define WELCOME_MSG                         MACHINE_NAME " prest."
 #define MSG_SD_INSERTED                     "Txartela sartuta"
@@ -23,13 +18,17 @@
 #define MSG_SET_HOME_OFFSETS                "Set home offsets"
 #define MSG_SET_ORIGIN                      "Hasiera ipini"
 #define MSG_PREHEAT_PLA                     "Aurreberotu PLA"
-#define MSG_PREHEAT_PLA_N                   "Aurreberotu PLA "
-#define MSG_PREHEAT_PLA_ALL                 "Berotu PLA Guztia"
+#define MSG_PREHEAT_PLA0                    "Aurreberotu PLA1"
+#define MSG_PREHEAT_PLA1                    "Aurreberotu PLA2"
+#define MSG_PREHEAT_PLA2                    "Aurreberotu PLA3"
+#define MSG_PREHEAT_PLA012                  "Berotu PLA Guztia"
 #define MSG_PREHEAT_PLA_BEDONLY             "Berotu PLA Ohea"
 #define MSG_PREHEAT_PLA_SETTINGS            "Berotu PLA Konfig"
 #define MSG_PREHEAT_ABS                     "Aurreberotu ABS"
-#define MSG_PREHEAT_ABS_N                   "Aurreberotu ABS "
-#define MSG_PREHEAT_ABS_ALL                 "Berotu ABS Guztia"
+#define MSG_PREHEAT_ABS0                    "Aurreberotu ABS 1"
+#define MSG_PREHEAT_ABS1                    "Aurreberotu ABS 2"
+#define MSG_PREHEAT_ABS2                    "Aurreberotu ABS 3"
+#define MSG_PREHEAT_ABS012                  "Berotu ABS Guztia"
 #define MSG_PREHEAT_ABS_BEDONLY             "Berotu ABS Ohea"
 #define MSG_PREHEAT_ABS_SETTINGS            "Berotu ABS Konfig"
 #define MSG_COOLDOWN                        "Hoztu"
@@ -42,18 +41,25 @@
 #define MSG_MOVE_Y                          "Mugitu Y"
 #define MSG_MOVE_Z                          "Mugitu Z"
 #define MSG_MOVE_E                          "Estrusorea"
+#define MSG_MOVE_E1                         "Estrusorea2"
+#define MSG_MOVE_E2                         "Estrusorea3"
 #define MSG_MOVE_01MM                       "Mugitu 0.1mm"
 #define MSG_MOVE_1MM                        "Mugitu 1mm"
 #define MSG_MOVE_10MM                       "Mugitu 10mm"
 #define MSG_SPEED                           "Abiadura"
 #define MSG_NOZZLE                          "Pita"
+#define MSG_NOZZLE1                         "Pita2"
+#define MSG_NOZZLE2                         "Pita3"
 #define MSG_BED                             "Ohea"
 #define MSG_FAN_SPEED                       "Haizagailua"
 #define MSG_FLOW                            "Fluxua"
+#define MSG_FLOW0                           "Fluxua 0"
+#define MSG_FLOW1                           "Fluxua 1"
+#define MSG_FLOW2                           "Fluxua 2"
 #define MSG_CONTROL                         "Kontrola"
-#define MSG_MIN                             LCD_STR_THERMOMETER " Min"
-#define MSG_MAX                             LCD_STR_THERMOMETER " Max"
-#define MSG_FACTOR                          LCD_STR_THERMOMETER " Faktorea"
+#define MSG_MIN                             " \002 Min"
+#define MSG_MAX                             " \002 Max"
+#define MSG_FACTOR                          " \002 Faktorea"
 #define MSG_AUTOTEMP                        "Auto tenperatura"
 #define MSG_ON                              "On "
 #define MSG_OFF                             "Off"
@@ -123,8 +129,8 @@
 #define MSG_BABYSTEP_Y                      "Babystep Y"
 #define MSG_BABYSTEP_Z                      "Babystep Z"
 #define MSG_ENDSTOP_ABORT                   "Endstop deuseztat"
-#define MSG_END_HOUR                        "hours"
-#define MSG_END_MINUTE                      "minutes"
+
+#define MSG_RECTRACT                        "Atzera eragin"
 
 #ifdef DELTA_CALIBRATION_MENU
     #define MSG_DELTA_CALIBRATE             "Delta Calibration"

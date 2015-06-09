@@ -607,6 +607,7 @@ double dnrm2 ( int n, double x[], int incx )
   double norm;
   double scale;
   double ssq;
+  double value;
 
   if ( n < 1 || incx < 1 )
   {
