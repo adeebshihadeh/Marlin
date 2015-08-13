@@ -78,7 +78,7 @@
 // 0 is not used
 // 1 is 100k thermistor - best choice for EPCOS 100k (4.7k pullup)
 // 2 is 200k thermistor - ATC Semitec 204GT-2 (4.7k pullup)
-// 3 is Mendel-parts thermistor (4.7k pullup)
+// 3 is CUSTOM (E3D m3 stud) EPCOS 100K (B57560G1104F)
 // 4 is 10k thermistor !! do not use it for a hotend. It gives bad resolution at high temp. !!
 // 5 is 100K thermistor - ATC Semitec 104GT-2 (Used in ParCan & J-Head) (4.7k pullup)
 // 6 is 100k EPCOS - Not as accurate as table 1 (created using a fluke thermocouple) (4.7k pullup)
@@ -104,7 +104,7 @@
 // 147 is Pt100 with 4k7 pullup
 // 110 is Pt100 with 1k pullup (non standard)
 
-#define TEMP_SENSOR_0 1
+#define TEMP_SENSOR_0 3
 #define TEMP_SENSOR_1 0
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_BED 1
