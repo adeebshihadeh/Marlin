@@ -686,7 +686,7 @@
   #if MB(RAMPS_13_EFB) || MB(AZTEEG_X3)
     #define HEATER_1_PIN       -1
   #else
-    #define HEATER_1_PIN       9    // EXTRUDER 2 (FAN On Sprinter)
+    #define HEATER_1_PIN       -1    // EXTRUDER 2 (FAN On Sprinter)
   #endif
 
 
