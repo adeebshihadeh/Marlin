@@ -19,7 +19,7 @@
 #ifndef VECTOR_3_H
 #define VECTOR_3_H
 
-#ifdef ENABLE_AUTO_BED_LEVELING
+#if ENABLED(ENABLE_AUTO_BED_LEVELING)
 class matrix_3x3;
 
 struct vector_3
@@ -37,7 +37,7 @@ struct vector_3
 	float get_length();
 	vector_3 get_normal();
 
-	void debug(char* title);
+	void debug(const char title[]);
 	
 	void apply_rotation(matrix_3x3 matrix);
 };
@@ -52,7 +52,7 @@ struct matrix_3x3
 
 	void set_to_identity();
 
-	void debug(char* title);
+	void debug(const char title[]);
 };
 
 

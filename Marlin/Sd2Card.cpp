@@ -19,10 +19,10 @@
  */
 #include "Marlin.h"
 
-#ifdef SDSUPPORT
+#if ENABLED(SDSUPPORT)
 #include "Sd2Card.h"
 //------------------------------------------------------------------------------
-#ifndef SOFTWARE_SPI
+#if DISABLED(SOFTWARE_SPI)
 // functions for hardware SPI
 //------------------------------------------------------------------------------
 // make sure SPCR rate is in expected bits
@@ -35,14 +35,14 @@
  */
 static void spiInit(uint8_t spiRate) {
   // See avr processor documentation
-  SPCR = (1 << SPE) | (1 << MSTR) | (spiRate >> 1);
-  SPSR = spiRate & 1 || spiRate == 6 ? 0 : 1 << SPI2X;
+  SPCR = BIT(SPE) | BIT(MSTR) | (spiRate >> 1);
+  SPSR = spiRate & 1 || spiRate == 6 ? 0 : BIT(SPI2X);
 }
 //------------------------------------------------------------------------------
 /** SPI receive a byte */
 static uint8_t spiRec() {
   SPDR = 0XFF;
-  while (!(SPSR & (1 << SPIF))) { /* Intentionally left empty */ }
+  while (!TEST(SPSR, SPIF)) { /* Intentionally left empty */ }
   return SPDR;
 }
 //------------------------------------------------------------------------------
@@ -52,18 +52,18 @@ void spiRead(uint8_t* buf, uint16_t nbyte) {
   if (nbyte-- == 0) return;
   SPDR = 0XFF;
   for (uint16_t i = 0; i < nbyte; i++) {
-    while (!(SPSR & (1 << SPIF))) { /* Intentionally left empty */ }
+    while (!TEST(SPSR, SPIF)) { /* Intentionally left empty */ }
     buf[i] = SPDR;
     SPDR = 0XFF;
   }
-  while (!(SPSR & (1 << SPIF))) { /* Intentionally left empty */ }
+  while (!TEST(SPSR, SPIF)) { /* Intentionally left empty */ }
   buf[nbyte] = SPDR;
 }
 //------------------------------------------------------------------------------
 /** SPI send a byte */
 static void spiSend(uint8_t b) {
   SPDR = b;
-  while (!(SPSR & (1 << SPIF))) { /* Intentionally left empty */ }
+  while (!TEST(SPSR, SPIF)) { /* Intentionally left empty */ }
 }
 //------------------------------------------------------------------------------
 /** SPI send block - only one call so force inline */
@@ -71,12 +71,12 @@ static inline __attribute__((always_inline))
   void spiSendBlock(uint8_t token, const uint8_t* buf) {
   SPDR = token;
   for (uint16_t i = 0; i < 512; i += 2) {
-    while (!(SPSR & (1 << SPIF))) { /* Intentionally left empty */ }
+    while (!TEST(SPSR, SPIF)) { /* Intentionally left empty */ }
     SPDR = buf[i];
-    while (!(SPSR & (1 << SPIF))) { /* Intentionally left empty */ }
+    while (!TEST(SPSR, SPIF)) { /* Intentionally left empty */ }
     SPDR = buf[i + 1];
   }
-  while (!(SPSR & (1 << SPIF))) { /* Intentionally left empty */ }
+  while (!TEST(SPSR, SPIF)) { /* Intentionally left empty */ }
 }
 //------------------------------------------------------------------------------
 #else  // SOFTWARE_SPI
@@ -209,7 +209,7 @@ void Sd2Card::chipSelectHigh() {
 }
 //------------------------------------------------------------------------------
 void Sd2Card::chipSelectLow() {
-#ifndef SOFTWARE_SPI
+#if DISABLED(SOFTWARE_SPI)
   spiInit(spiRate_);
 #endif  // SOFTWARE_SPI
   digitalWrite(chipSelectPin_, LOW);
@@ -297,7 +297,7 @@ bool Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   pinMode(SPI_MOSI_PIN, OUTPUT);
   pinMode(SPI_SCK_PIN, OUTPUT);
 
-#ifndef SOFTWARE_SPI
+#if DISABLED(SOFTWARE_SPI)
   // SS must be in output mode even it is not chip select
   pinMode(SS_PIN, OUTPUT);
   // set SS high - may be chip select for another SPI device
@@ -353,7 +353,7 @@ bool Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   }
   chipSelectHigh();
 
-#ifndef SOFTWARE_SPI
+#if DISABLED(SOFTWARE_SPI)
   return setSckRate(sckRateID);
 #else  // SOFTWARE_SPI
   return true;
@@ -373,7 +373,7 @@ bool Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
  * the value zero, false, is returned for failure.
  */
 bool Sd2Card::readBlock(uint32_t blockNumber, uint8_t* dst) {
-#ifdef SD_CHECK_AND_RETRY
+#if ENABLED(SD_CHECK_AND_RETRY)
   uint8_t retryCnt = 3;
   // use address if not SDHC card
   if (type()!= SD_CARD_TYPE_SDHC) blockNumber <<= 9;
@@ -422,7 +422,7 @@ bool Sd2Card::readData(uint8_t *dst) {
   return readData(dst, 512);
 }
 
-#ifdef SD_CHECK_AND_RETRY
+#if ENABLED(SD_CHECK_AND_RETRY)
 static const uint16_t crctab[] PROGMEM = {
   0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
   0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
@@ -483,7 +483,7 @@ bool Sd2Card::readData(uint8_t* dst, uint16_t count) {
   // transfer data
   spiRead(dst, count);
 
-#ifdef SD_CHECK_AND_RETRY
+#if ENABLED(SD_CHECK_AND_RETRY)
   {
     uint16_t calcCrc = CRC_CCITT(dst, count);
     uint16_t recvCrc = spiRec() << 8;

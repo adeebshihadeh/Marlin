@@ -22,30 +22,35 @@
 #define stepper_h 
 
 #include "planner.h"
+#include "stepper_indirection.h"
 
-#if EXTRUDERS > 2
-  #define WRITE_E_STEP(v) { if(current_block->active_extruder == 2) { WRITE(E2_STEP_PIN, v); } else { if(current_block->active_extruder == 1) { WRITE(E1_STEP_PIN, v); } else { WRITE(E0_STEP_PIN, v); }}}
-  #define NORM_E_DIR() { if(current_block->active_extruder == 2) { WRITE(E2_DIR_PIN, !INVERT_E2_DIR); } else { if(current_block->active_extruder == 1) { WRITE(E1_DIR_PIN, !INVERT_E1_DIR); } else { WRITE(E0_DIR_PIN, !INVERT_E0_DIR); }}}
-  #define REV_E_DIR() { if(current_block->active_extruder == 2) { WRITE(E2_DIR_PIN, INVERT_E2_DIR); } else { if(current_block->active_extruder == 1) { WRITE(E1_DIR_PIN, INVERT_E1_DIR); } else { WRITE(E0_DIR_PIN, INVERT_E0_DIR); }}}
+#if EXTRUDERS > 3
+  #define E_STEP_WRITE(v) { if(current_block->active_extruder == 3) { E3_STEP_WRITE(v); } else { if(current_block->active_extruder == 2) { E2_STEP_WRITE(v); } else { if(current_block->active_extruder == 1) { E1_STEP_WRITE(v); } else { E0_STEP_WRITE(v); }}}}
+  #define NORM_E_DIR() { if(current_block->active_extruder == 3) { E3_DIR_WRITE( !INVERT_E3_DIR); } else { if(current_block->active_extruder == 2) { E2_DIR_WRITE(!INVERT_E2_DIR); } else { if(current_block->active_extruder == 1) { E1_DIR_WRITE(!INVERT_E1_DIR); } else { E0_DIR_WRITE(!INVERT_E0_DIR); }}}}
+  #define REV_E_DIR() { if(current_block->active_extruder == 3) { E3_DIR_WRITE(INVERT_E3_DIR); } else { if(current_block->active_extruder == 2) { E2_DIR_WRITE(INVERT_E2_DIR); } else { if(current_block->active_extruder == 1) { E1_DIR_WRITE(INVERT_E1_DIR); } else { E0_DIR_WRITE(INVERT_E0_DIR); }}}}
+#elif EXTRUDERS > 2
+  #define E_STEP_WRITE(v) { if(current_block->active_extruder == 2) { E2_STEP_WRITE(v); } else { if(current_block->active_extruder == 1) { E1_STEP_WRITE(v); } else { E0_STEP_WRITE(v); }}}
+  #define NORM_E_DIR() { if(current_block->active_extruder == 2) { E2_DIR_WRITE(!INVERT_E2_DIR); } else { if(current_block->active_extruder == 1) { E1_DIR_WRITE(!INVERT_E1_DIR); } else { E0_DIR_WRITE(!INVERT_E0_DIR); }}}
+  #define REV_E_DIR() { if(current_block->active_extruder == 2) { E2_DIR_WRITE(INVERT_E2_DIR); } else { if(current_block->active_extruder == 1) { E1_DIR_WRITE(INVERT_E1_DIR); } else { E0_DIR_WRITE(INVERT_E0_DIR); }}}
 #elif EXTRUDERS > 1
-  #ifndef DUAL_X_CARRIAGE
-    #define WRITE_E_STEP(v) { if(current_block->active_extruder == 1) { WRITE(E1_STEP_PIN, v); } else { WRITE(E0_STEP_PIN, v); }}
-    #define NORM_E_DIR() { if(current_block->active_extruder == 1) { WRITE(E1_DIR_PIN, !INVERT_E1_DIR); } else { WRITE(E0_DIR_PIN, !INVERT_E0_DIR); }}
-    #define REV_E_DIR() { if(current_block->active_extruder == 1) { WRITE(E1_DIR_PIN, INVERT_E1_DIR); } else { WRITE(E0_DIR_PIN, INVERT_E0_DIR); }}
+  #if DISABLED(DUAL_X_CARRIAGE)
+    #define E_STEP_WRITE(v) { if(current_block->active_extruder == 1) { E1_STEP_WRITE(v); } else { E0_STEP_WRITE(v); }}
+    #define NORM_E_DIR() { if(current_block->active_extruder == 1) { E1_DIR_WRITE(!INVERT_E1_DIR); } else { E0_DIR_WRITE(!INVERT_E0_DIR); }}
+    #define REV_E_DIR() { if(current_block->active_extruder == 1) { E1_DIR_WRITE(INVERT_E1_DIR); } else { E0_DIR_WRITE(INVERT_E0_DIR); }}
   #else
     extern bool extruder_duplication_enabled;
-    #define WRITE_E_STEP(v) { if(extruder_duplication_enabled) { WRITE(E0_STEP_PIN, v); WRITE(E1_STEP_PIN, v); } else if(current_block->active_extruder == 1) { WRITE(E1_STEP_PIN, v); } else { WRITE(E0_STEP_PIN, v); }}
-    #define NORM_E_DIR() { if(extruder_duplication_enabled) { WRITE(E0_DIR_PIN, !INVERT_E0_DIR); WRITE(E1_DIR_PIN, !INVERT_E1_DIR); } else if(current_block->active_extruder == 1) { WRITE(E1_DIR_PIN, !INVERT_E1_DIR); } else { WRITE(E0_DIR_PIN, !INVERT_E0_DIR); }}
-    #define REV_E_DIR() { if(extruder_duplication_enabled) { WRITE(E0_DIR_PIN, INVERT_E0_DIR); WRITE(E1_DIR_PIN, INVERT_E1_DIR); } else if(current_block->active_extruder == 1) { WRITE(E1_DIR_PIN, INVERT_E1_DIR); } else { WRITE(E0_DIR_PIN, INVERT_E0_DIR); }}
+    #define E_STEP_WRITE(v) { if(extruder_duplication_enabled) { E0_STEP_WRITE(v); E1_STEP_WRITE(v); } else if(current_block->active_extruder == 1) { E1_STEP_WRITE(v); } else { E0_STEP_WRITE(v); }}
+    #define NORM_E_DIR() { if(extruder_duplication_enabled) { E0_DIR_WRITE(!INVERT_E0_DIR); E1_DIR_WRITE(!INVERT_E1_DIR); } else if(current_block->active_extruder == 1) { E1_DIR_WRITE(!INVERT_E1_DIR); } else { E0_DIR_WRITE(!INVERT_E0_DIR); }}
+    #define REV_E_DIR() { if(extruder_duplication_enabled) { E0_DIR_WRITE(INVERT_E0_DIR); E1_DIR_WRITE(INVERT_E1_DIR); } else if(current_block->active_extruder == 1) { E1_DIR_WRITE(INVERT_E1_DIR); } else { E0_DIR_WRITE(INVERT_E0_DIR); }}
   #endif  
 #else
-  #define WRITE_E_STEP(v) WRITE(E0_STEP_PIN, v)
-  #define NORM_E_DIR() WRITE(E0_DIR_PIN, !INVERT_E0_DIR)
-  #define REV_E_DIR() WRITE(E0_DIR_PIN, INVERT_E0_DIR)
+  #define E_STEP_WRITE(v) E0_STEP_WRITE(v)
+  #define NORM_E_DIR() E0_DIR_WRITE(!INVERT_E0_DIR)
+  #define REV_E_DIR() E0_DIR_WRITE(INVERT_E0_DIR)
 #endif
 
-#ifdef ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED
-extern bool abort_on_endstop_hit;
+#if ENABLED(ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED)
+  extern bool abort_on_endstop_hit;
 #endif
 
 // Initialize and start the stepper motor subsystem
@@ -61,10 +66,8 @@ void st_set_e_position(const long &e);
 // Get current position in steps
 long st_get_position(uint8_t axis);
 
-#ifdef ENABLE_AUTO_BED_LEVELING
 // Get current position in mm
-float st_get_position_mm(uint8_t axis);
-#endif  //ENABLE_AUTO_BED_LEVELING
+float st_get_position_mm(AxisEnum axis);
 
 // The stepper subsystem goes to sleep when it runs out of things to execute. Call this
 // to notify the subsystem that it is time to go to work.
@@ -92,10 +95,14 @@ void digipot_current(uint8_t driver, int current);
 void microstep_init();
 void microstep_readings();
 
-#ifdef BABYSTEPPING
+#if ENABLED(Z_DUAL_ENDSTOPS)
+  void In_Homing_Process(bool state);
+  void Lock_z_motor(bool state);
+  void Lock_z2_motor(bool state);
+#endif
+
+#if ENABLED(BABYSTEPPING)
   void babystep(const uint8_t axis,const bool direction); // perform a short step with a single stepper motor, outside of any convention
 #endif
      
-
-
 #endif
