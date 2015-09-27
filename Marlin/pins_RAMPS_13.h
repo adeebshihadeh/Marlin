@@ -83,14 +83,14 @@
 #endif
 
 #if MB(RAMPS_13_EFF) || ENABLED(IS_RAMPS_EFB)
-  #define FAN_PIN           9 // (Sprinter config)
+  #define FAN_PIN           6 // (Sprinter config)
   #if MB(RAMPS_13_EFF)
     #define CONTROLLERFAN_PIN  -1 // Pin used for the fan to cool controller
   #endif
 #elif MB(RAMPS_13_EEF) || MB(RAMPS_13_SF)
-  #define FAN_PIN           8
+  #define FAN_PIN           6
 #else
-  #define FAN_PIN           11 // IO pin. Buffer needed
+  #define FAN_PIN           6 // IO pin. Buffer needed
 #endif
 
 #define PS_ON_PIN          12

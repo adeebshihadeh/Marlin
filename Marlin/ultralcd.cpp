@@ -797,6 +797,9 @@ static void lcd_move_menu() {
   MENU_ITEM(submenu, MSG_MOVE_10MM, lcd_move_menu_10mm);
   MENU_ITEM(submenu, MSG_MOVE_1MM, lcd_move_menu_1mm);
   MENU_ITEM(submenu, MSG_MOVE_01MM, lcd_move_menu_01mm);
+  MENU_ITEM(gcode, MSG_HOME_X, PSTR("G28 X"));
+  MENU_ITEM(gcode, MSG_HOME_Y, PSTR("G28 Y"));
+  MENU_ITEM(gcode, MSG_HOME_Z, PSTR("G28 Z"));
   //TODO:X,Y,Z,E
   END_MENU();
 }

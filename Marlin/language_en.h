@@ -129,6 +129,15 @@
 #ifndef MSG_MOVE_10MM
 #define MSG_MOVE_10MM                       "Move 10mm"
 #endif
+#ifndef MSG_HOME_X
+#define MSG_HOME_X                          "Home X"
+#endif
+#ifndef MSG_HOME_Y
+#define MSG_HOME_Y                          "Home Y"
+#endif
+#ifndef MSG_HOME_Z
+#define MSG_HOME_Z                          "Home Z"
+#endif
 #ifndef MSG_SPEED
 #define MSG_SPEED                           "Speed"
 #endif
